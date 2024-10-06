@@ -1,0 +1,35 @@
+import pandas as pd
+
+# Carga del dataset
+data = pd.read_csv("/content/Drive/MyDrive/datos/Market.csv")
+
+# Función para calcular percentil sin librerías
+def calcular_percentil(datos, percentil):
+    datos_ordenados = sorted(datos)
+    n = len(datos_ordenados)
+    posicion = (percentil / 100) * (n + 1)
+    if posicion.is_integer():
+        return datos_ordenados[int(posicion) - 1]
+    else:
+        pos_inferior = int(posicion) - 1
+        pos_superior = int(posicion)
+        return (datos_ordenados[pos_inferior] + datos_ordenados[pos_superior]) / 2
+
+# Función para calcular cuartiles
+def calcular_cuartiles(datos):
+    Q1 = calcular_percentil(datos, 25)
+    Q2 = calcular_percentil(datos, 50)  # Mediana
+    Q3 = calcular_percentil(datos, 75)
+    return Q1, Q2, Q3
+
+# Imprime las columnas del DataFrame para identificar la columna correcta
+print(data.columns)
+
+# Selección de una columna numérica del dataset
+# Reemplaza 'NombreCorrectoDeColumna' con el nombre real de la columna que deseas usar
+#columna_ejemplo = data['Customer type'] # This is a column of strings, you cannot calculate a quantile of a string
+columna_ejemplo = data['Unit price'] # Replaced 'Customer type' with 'Unit price'
+
+# Cálculo de los cuartiles
+q1, q2, q3 = calcular_cuartiles(columna_ejemplo)
+print(f"Cuartil 1: {q1}, Mediana (Q2): {q2}, Cuartil 3: {q3}")
